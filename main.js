@@ -1,3 +1,16 @@
+// 1 state adalah snapshot papan
+// bisa lebih bagus jika posisi 0 juga dicatat
+var sid = 0;
+const State = class {
+  constructor(board, zeropos_x, zeropos_y) {
+    this.sid = sid++;
+    this.board = board;
+    this.zeropos_x = zeropos_x;
+    this.zeropos_y = zeropos_y;
+  }
+};
+
+
 function main() {
   const dimensiBoard = 3
   let zeropos = []
@@ -27,21 +40,14 @@ function main() {
   }
   console.log('zeropos:',zeropos);
 
-  // 1 state adalah snapshot papan
-  // bisa lebih bagus jika posisi 0 juga dicatat
-  const State = class {
-    constructor(board, zeropos_x, zeropos_y) {
-      this.board = board;
-      this.zeropos_x = zeropos_x;
-      this.zeropos_y = zeropos_y;
-    }
-  };
+
+  // AI PHASE START
 
   var start = new State(inputs, zeropos[1], zeropos[0]);
   console.log('start:',start);
   var queue = new Queue();
+  var done = new Array();
   queue.enqueue(start);
-  //   console.log(queue);
   let ctr = 0
   do {
     console.log(`Iterasi ke-${++ctr}`);
@@ -54,63 +60,66 @@ function main() {
       console.log("kanan");
       let newBoard = swap(
         curr.board,
+        curr.zeropos_y,
         curr.zeropos_x,
         curr.zeropos_y,
         curr.zeropos_x + 1,
-        curr.zeropos_y
       );
       let newCurr = new State(newBoard, curr.zeropos_x + 1, curr.zeropos_y);
-      queue.enqueue(newCurr);
+      if (!isReccurant(newCurr.board,done)) queue.enqueue(newCurr);
     }
     if (curr.zeropos_x > 0) {
       // bisa ke kiri
       console.log("kiri");
       let newBoard = swap(
         curr.board,
+        curr.zeropos_y,
         curr.zeropos_x,
         curr.zeropos_y,
         curr.zeropos_x - 1,
-        curr.zeropos_y
       );
       let newCurr = new State(newBoard, curr.zeropos_x - 1, curr.zeropos_y);
-      queue.enqueue(newCurr);
+      if (!isReccurant(newCurr.board,done)) queue.enqueue(newCurr);
     }
     if (curr.zeropos_y < 2) {
       // bisa ke bawah
       console.log("bawah");
       let newBoard = swap(
         curr.board,
-        curr.zeropos_x,
         curr.zeropos_y,
         curr.zeropos_x,
-        curr.zeropos_y + 1
+        curr.zeropos_y + 1,
+        curr.zeropos_x,
       );
       let newCurr = new State(newBoard, curr.zeropos_x, curr.zeropos_y + 1);
-      queue.enqueue(newCurr);
+      if (!isReccurant(newCurr.board,done)) queue.enqueue(newCurr);
     }
     if (curr.zeropos_y > 0) {
       // bisa ke atas
       console.log("atas");
       let newBoard = swap(
         curr.board,
-        curr.zeropos_x,
         curr.zeropos_y,
         curr.zeropos_x,
-        curr.zeropos_y - 1
+        curr.zeropos_y - 1,
+        curr.zeropos_x,
       );
       let newCurr = new State(newBoard, curr.zeropos_x, curr.zeropos_y - 1);
-      queue.enqueue(newCurr);
+      if (!isReccurant(newCurr.board,done)) queue.enqueue(newCurr);
     }
     console.log("sesudah swap");
     console.log('curr:',curr);
     console.table(curr.board)
-    if (ctr > 100) {
+    if (ctr > 362880) {
       console.log("BERAKKKKKKK");
       break
     };
+
+    // add curr to done array
+    done.push(curr);
   } while (!isFinish(curr.board) || queue.isEmpty);
 
-  console.log(queue.board);
+  console.log("done",done);
 }
 
 function isFinish(board) {
@@ -133,7 +142,6 @@ function swap(inputArr, i1, j1, i2, j2) {
   ];
   for (let i = 0; i < inputArr.length; i++) {
     for (let j = 0; j < inputArr[i].length; j++) {
-      console.log(i,j);
       array[i][j] = inputArr[i][j];
     }
   }
@@ -153,4 +161,27 @@ function swap(inputArr, i1, j1, i2, j2) {
   // console.log('array[i2][j2]:',array[i2][j2]);
   // console.log("END SWAP ===");
   return array;
+}
+
+/**
+ * 
+ * @param {Array[3][3]} board 
+ * @param {Array[State]} done 
+ * @returns True if state is a reccurent state
+ */
+function isReccurant(board, done){
+  for (let x = 0; x < done.length; x++) {
+    let sameCtr = 0;
+    for (let i = 0; i < board.length; i++) {
+      for (let j = 0; j < board[i].length; j++) {
+        if (done[x].board[i][j] == board[i][j]){
+          sameCtr++;
+        }
+      }
+    }
+    if (sameCtr == board.length * board[0].length){
+      return true;
+    }
+  }
+  return false;
 }
