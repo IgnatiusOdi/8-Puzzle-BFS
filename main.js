@@ -1,15 +1,14 @@
 // 1 state adalah snapshot papan
 // bisa lebih bagus jika posisi 0 juga dicatat
-var sid = 0;
 const State = class {
-  constructor(board, zeropos_x, zeropos_y) {
-    this.sid = sid++;
+  constructor(board, zeropos_x, zeropos_y, step, parent) {
     this.board = board;
     this.zeropos_x = zeropos_x;
     this.zeropos_y = zeropos_y;
+    this.step = step;
+    this.parent = parent;
   }
 };
-
 
 function main() {
   const dimensiBoard = 3
@@ -43,7 +42,7 @@ function main() {
 
   // AI PHASE START
 
-  var start = new State(inputs, zeropos[1], zeropos[0]);
+  var start = new State(inputs, zeropos[1], zeropos[0], "??", undefined);
   console.log('start:',start);
   var queue = new Queue();
   var done = new Array();
@@ -65,7 +64,7 @@ function main() {
         curr.zeropos_y,
         curr.zeropos_x + 1,
       );
-      let newCurr = new State(newBoard, curr.zeropos_x + 1, curr.zeropos_y);
+      let newCurr = new State(newBoard, curr.zeropos_x + 1, curr.zeropos_y, "Right", curr);
       if (!isReccurant(newCurr.board,done)) queue.enqueue(newCurr);
     }
     if (curr.zeropos_x > 0) {
@@ -78,7 +77,7 @@ function main() {
         curr.zeropos_y,
         curr.zeropos_x - 1,
       );
-      let newCurr = new State(newBoard, curr.zeropos_x - 1, curr.zeropos_y);
+      let newCurr = new State(newBoard, curr.zeropos_x - 1, curr.zeropos_y, "Left", curr);
       if (!isReccurant(newCurr.board,done)) queue.enqueue(newCurr);
     }
     if (curr.zeropos_y < 2) {
@@ -91,7 +90,7 @@ function main() {
         curr.zeropos_y + 1,
         curr.zeropos_x,
       );
-      let newCurr = new State(newBoard, curr.zeropos_x, curr.zeropos_y + 1);
+      let newCurr = new State(newBoard, curr.zeropos_x, curr.zeropos_y + 1, "Down", curr);
       if (!isReccurant(newCurr.board,done)) queue.enqueue(newCurr);
     }
     if (curr.zeropos_y > 0) {
@@ -104,7 +103,7 @@ function main() {
         curr.zeropos_y - 1,
         curr.zeropos_x,
       );
-      let newCurr = new State(newBoard, curr.zeropos_x, curr.zeropos_y - 1);
+      let newCurr = new State(newBoard, curr.zeropos_x, curr.zeropos_y - 1, "Up", curr);
       if (!isReccurant(newCurr.board,done)) queue.enqueue(newCurr);
     }
     console.log("sesudah swap");
@@ -119,9 +118,16 @@ function main() {
     done.push(curr);
   } while (!isFinish(curr.board) || queue.isEmpty);
 
-  console.log("done",done);
+  console.log("done");
+  printSolution(done[done.length-1]);
+  printSolutionBoard(done[done.length-1]);
 }
 
+/**
+ * Function to check if the board is goal state
+ * @param {Int[][]} board 
+ * @returns {Boolean} True if board is goal state
+ */
 function isFinish(board) {
   return board[0][0] == 0 &&
     board[0][1] == 1 &&
@@ -134,6 +140,15 @@ function isFinish(board) {
     board[2][2] == 8
 }
 
+/**
+ * Function to swap 2 element in 1 array
+ * @param {Int[][]} inputArr 
+ * @param {Int} i1 
+ * @param {Int} j1 
+ * @param {Int} i2 
+ * @param {Int} j2 
+ * @returns {Int[][]}
+ */
 function swap(inputArr, i1, j1, i2, j2) {
   const array = [
     new Array(3),
@@ -164,10 +179,10 @@ function swap(inputArr, i1, j1, i2, j2) {
 }
 
 /**
- * 
- * @param {Array[3][3]} board 
- * @param {Array[State]} done 
- * @returns True if state is a reccurent state
+ * function to check if a state is a reccurent one given a history array
+ * @param {Int[][]} board 
+ * @param {State[]} done 
+ * @returns {Boolean} True if state is a reccurent state
  */
 function isReccurant(board, done){
   for (let x = 0; x < done.length; x++) {
@@ -184,4 +199,26 @@ function isReccurant(board, done){
     }
   }
   return false;
+}
+
+/**
+ * function to print the solution given an end state  
+ * @param {State} state 
+ */
+function printSolution(state) {
+  if (state.parent != undefined) {
+    printSolution(state.parent)
+  }
+  console.log(state.step);
+}
+
+/**
+ * function to print the solution board given an end state  
+ * @param {State} state 
+ */
+function printSolutionBoard(state) {
+  if (state.parent != undefined) {
+    printSolutionBoard(state.parent)
+  }
+  console.table(state.board);
 }
