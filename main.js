@@ -1,20 +1,24 @@
 function main() {
-  const dimensiBoard = 3;
-  var input = [
+  const dimensiBoard = 3
+  let zeropos = []
+  var inputs = [
     [0, 0, 0],
     [0, 0, 0],
     [0, 0, 0],
   ]
-  var hasil = [
+  var goals = [
     [0, 0, 0],
     [0, 0, 0],
     [0, 0, 0],
   ]
+  // pake traktor
   for (let i = 0; i < Math.pow(dimensiBoard, 2); i++) {
-    console.log('i / 3:',i / 3);
-    console.log('i % 3:',i % 3);
-    input[Math.floor(i / 3)][i % 3] = document.getElementById("input_" + (i + 1)).value
-    hasil[Math.floor(i / 3)][i % 3] = document.getElementById("hasil_" + (i + 1)).value
+    const y = Math.floor(i / 3)
+    const x = i % 3
+    inputs[y][x] = document.getElementById("input_" + (i + 1)).value
+    const goal = document.getElementById("goal_" + (i + 1)).value
+    goals[y][x] = goal
+    if (goal == 0) zeropos = [y, x]
   }
 
   // 1 state adalah snapshot papan
@@ -22,49 +26,26 @@ function main() {
   const State = class {
     constructor(board, zeropos_x, zeropos_y) {
       this.board = board;
-      this.zeropos = zeropos;
+      this.zeropos_x = zeropos_x;
+      this.zeropos_y = zeropos_y;
     }
   };
 
-  let zeropos = [];
-
-  for (let i = 0; i < 3; i++) {
-    for (let j = 0; j < 3; j++) {
-      if (document.getElementById("hasil_1").value == 0) {
-        zeropos = [0, 0];
-      } else if (document.getElementById("hasil_2").value == 0) {
-        zeropos = [0, 1];
-      } else if (document.getElementById("hasil_3").value == 0) {
-        zeropos = [0, 2];
-      } else if (document.getElementById("hasil_4").value == 0) {
-        zeropos = [1, 0];
-      } else if (document.getElementById("hasil_5").value == 0) {
-        zeropos = [1, 1];
-      } else if (document.getElementById("hasil_6").value == 0) {
-        zeropos = [1, 2];
-      } else if (document.getElementById("hasil_7").value == 0) {
-        zeropos = [2, 0];
-      } else if (document.getElementById("hasil_8").value == 0) {
-        zeropos = [2, 1];
-      } else if (document.getElementById("hasil_9").value == 0) {
-        zeropos = [2, 2];
-      }
-    }
-  }
-  //   console.log("Zeropos=",zeropos);
-
-  var start = new State(input, zeropos[0], zeropos[1]);
-
+  var start = new State(inputs, zeropos[0], zeropos[1]);
+  console.log('start:',start);
   var queue = new Queue();
   queue.enqueue(start);
   //   console.log(queue);
+  let ctr = 0
   do {
+    console.log(`Iterasi ke-${++ctr}`);
     var curr = queue.dequeue();
     console.log("curr:", curr);
-    console.log("curr zeropos y", curr.zeropos_y);
+    console.log("curr zeropos y", curr.zeropos_y[0]);
 
     if (curr.zeropos_y > 0) {
       // bisa ke kanan
+      console.log("kanan");
       let newBoard = swap(
         curr.board,
         curr.zeropos_x,
@@ -77,6 +58,7 @@ function main() {
     }
     if (curr.zeropos_y < 2) {
       // bisa ke kiri
+      console.log("kiri");
       let newBoard = swap(
         curr.board,
         curr.zeropos_x,
@@ -89,6 +71,7 @@ function main() {
     }
     if (curr.zeropos_x > 0) {
       // bisa ke bawah
+      console.log("bawah");
       let newBoard = swap(
         curr.board,
         curr.zeropos_x,
@@ -101,6 +84,7 @@ function main() {
     }
     if (curr.zeropos_x < 2) {
       // bisa ke atas
+      console.log("atas");
       let newBoard = swap(
         curr.board,
         curr.zeropos_x,
@@ -140,5 +124,5 @@ function swap(array, i1, j1, i2, j2) {
   return array;
 }
 
-// function BFS(input, hasil) {
+// function BFS(inputs, goals) {
 // }
