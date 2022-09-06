@@ -1,38 +1,21 @@
 function main() {
+  const dimensiBoard = 3;
   var input = [
-    [
-      document.getElementById("input_1").value,
-      document.getElementById("input_2").value,
-      document.getElementById("input_3").value,
-    ],
-    [
-      document.getElementById("input_4").value,
-      document.getElementById("input_5").value,
-      document.getElementById("input_6").value,
-    ],
-    [
-      document.getElementById("input_7").value,
-      document.getElementById("input_8").value,
-      document.getElementById("input_9").value,
-    ],
-  ];
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0],
+  ]
   var hasil = [
-    [
-      document.getElementById("hasil_1").value,
-      document.getElementById("hasil_2").value,
-      document.getElementById("hasil_3").value,
-    ],
-    [
-      document.getElementById("hasil_4").value,
-      document.getElementById("hasil_5").value,
-      document.getElementById("hasil_6").value,
-    ],
-    [
-      document.getElementById("hasil_7").value,
-      document.getElementById("hasil_8").value,
-      document.getElementById("hasil_9").value,
-    ],
-  ];
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0],
+  ]
+  for (let i = 0; i < Math.pow(dimensiBoard, 2); i++) {
+    console.log('i / 3:',i / 3);
+    console.log('i % 3:',i % 3);
+    input[Math.floor(i / 3)][i % 3] = document.getElementById("input_" + (i + 1)).value
+    hasil[Math.floor(i / 3)][i % 3] = document.getElementById("hasil_" + (i + 1)).value
+  }
 
   // 1 state adalah snapshot papan
   // bisa lebih bagus jika posisi 0 juga dicatat
@@ -68,13 +51,13 @@ function main() {
       }
     }
   }
-//   console.log("Zeropos=",zeropos);
+  //   console.log("Zeropos=",zeropos);
 
   var start = new State(input, zeropos[0], zeropos[1]);
 
   var queue = new Queue();
   queue.enqueue(start);
-//   console.log(queue);
+  //   console.log(queue);
   do {
     var curr = queue.dequeue();
     console.log("curr:", curr);
