@@ -114,8 +114,7 @@ function main() {
 }
 
 function isFinish(board) {
-  if (
-    board[0][0] == 0 &&
+  return board[0][0] == 0 &&
     board[0][1] == 1 &&
     board[0][2] == 2 &&
     board[1][0] == 3 &&
@@ -124,12 +123,20 @@ function isFinish(board) {
     board[2][0] == 6 &&
     board[2][1] == 7 &&
     board[2][2] == 8
-  )
-    return true;
-  else return false;
 }
 
-function swap(array, i1, j1, i2, j2) {
+function swap(inputArr, i1, j1, i2, j2) {
+  const array = [
+    new Array(3),
+    new Array(3),
+    new Array(3),
+  ];
+  for (let i = 0; i < inputArr.length; i++) {
+    for (let j = 0; j < inputArr[i].length; j++) {
+      console.log(i,j);
+      array[i][j] = inputArr[i][j];
+    }
+  }
   // console.log("SWAP ===");
   // console.log('i1:',i1);
   // console.log('j1:',j1);
@@ -147,6 +154,3 @@ function swap(array, i1, j1, i2, j2) {
   // console.log("END SWAP ===");
   return array;
 }
-
-// function BFS(inputs, goals) {
-// }
