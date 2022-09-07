@@ -42,7 +42,7 @@ function main() {
 
   // AI PHASE START
 
-  var start = new State(inputs, zeropos[1], zeropos[0], "??", undefined);
+  var start = new State(inputs, zeropos[1], zeropos[0], "Root", undefined);
   console.log('start:',start);
   var queue = new Queue();
   var done = new Array();
@@ -110,7 +110,6 @@ function main() {
     console.log('curr:',curr);
     console.table(curr.board)
     if (ctr > 362880) {
-      console.log("BERAKKKKKKK");
       break
     };
 
@@ -119,7 +118,9 @@ function main() {
   } while (!isFinish(curr.board) || queue.isEmpty);
 
   console.log("done");
+  console.log("Solution:");
   printSolution(done[done.length-1]);
+  console.log("Solution Board:");
   printSolutionBoard(done[done.length-1]);
 }
 
