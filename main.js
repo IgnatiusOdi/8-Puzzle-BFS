@@ -10,8 +10,71 @@ const State = class {
   }
 };
 
+const dimensiBoard = 3
+var inputsDom = [
+  [-1, -1, -1],
+  [-1, -1, -1],
+  [-1, -1, -1],
+]
+var goalsDom = [
+  [-1, -1, -1],
+  [-1, -1, -1],
+  [-1, -1, -1],
+]
+
+function init() {
+  // pake traktor
+  for (let i = 0; i < Math.pow(dimensiBoard, 2); i++) {
+    const y = Math.floor(i / 3)
+    const x = i % 3
+    const input = document.getElementById("input_" + (i + 1))
+    inputsDom[y][x] = input
+    const goal = document.getElementById("goal_" + (i + 1))
+    goalsDom[y][x] = goal
+    if (input == 0) zeropos = [y, x]
+  }
+  console.log('inputsDom:',inputsDom)
+  console.log('goalsDom:',goalsDom)
+}
+
+function randomInputMatrix() {
+  const numbers = []
+  let randomValue;
+  for (let i = 0; numbers.length < Math.pow(dimensiBoard, 2); i++) {
+    randomValue = Math.floor(Math.random() * Math.pow(dimensiBoard, 2))
+    let isValid = true
+    for (let j = 0; j < numbers.length; j++) {
+      isValid &= !(randomValue == numbers[j])
+    }
+    if (isValid) numbers.push(randomValue)
+  }
+  for (let i = 0; i < dimensiBoard; i++) {
+    for (let j = 0; j < dimensiBoard; j++) {
+      inputsDom[i][j].value = numbers.shift()
+    }
+  }
+}
+
+function randomGoalMatrix() {
+  const numbers = []
+  let randomValue;
+  for (let i = 0; numbers.length < Math.pow(dimensiBoard, 2); i++) {
+    randomValue = Math.floor(Math.random() * Math.pow(dimensiBoard, 2))
+    let isValid = true
+    for (let j = 0; j < numbers.length; j++) {
+      isValid &= !(randomValue == numbers[j])
+    }
+    if (isValid) numbers.push(randomValue)
+  }
+  for (let i = 0; i < dimensiBoard; i++) {
+    for (let j = 0; j < dimensiBoard; j++) {
+      goalsDom[i][j].value = numbers.shift()
+    }
+  }
+}
+
+
 function BFS() {
-  const dimensiBoard = 3
   let zeropos = []
   const inputs = [
     [-1, -1, -1],
