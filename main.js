@@ -10,7 +10,7 @@ const State = class {
   }
 };
 
-function main() {
+function BFS() {
   const dimensiBoard = 3
   let zeropos = []
   const inputs = [
@@ -19,29 +19,23 @@ function main() {
     [-1, -1, -1],
   ]
   var goals = [
-    [0, 0, 0],
-    [0, 0, 0],
-    [0, 0, 0],
+    [-1, -1, -1],
+    [-1, -1, -1],
+    [-1, -1, -1],
   ]
   // pake traktor
   for (let i = 0; i < Math.pow(dimensiBoard, 2); i++) {
     const y = Math.floor(i / 3)
     const x = i % 3
     const input = document.getElementById("input_" + (i + 1)).value
-    console.log('inputs[y][x] :',inputs[y][x]);
-    console.log('y, x:',y, x);
-    console.log('input:',input);
-    console.log('inputs:',inputs);
     inputs[y][x] = input
     const goal = document.getElementById("goal_" + (i + 1)).value
     goals[y][x] = goal
     if (input == 0) zeropos = [y, x]
   }
-  console.log('zeropos:',zeropos);
-
 
   // AI PHASE START
-
+  // LINK SUTARUTO!!
   var start = new State(inputs, zeropos[1], zeropos[0], "Root", undefined);
   console.log('start:',start);
   var queue = new Queue();
