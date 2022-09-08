@@ -38,39 +38,127 @@ function init() {
 }
 
 function randomInputMatrix() {
-  const numbers = []
-  let randomValue;
-  for (let i = 0; numbers.length < Math.pow(dimensiBoard, 2); i++) {
-    randomValue = Math.floor(Math.random() * Math.pow(dimensiBoard, 2))
-    let isValid = true
-    for (let j = 0; j < numbers.length; j++) {
-      isValid &= !(randomValue == numbers[j])
-    }
-    if (isValid) numbers.push(randomValue)
-  }
+  const swapAmount = random(100, 150)
+  // karena kita random input matrix
+  // maka board awal yang akan digunakan
+  // adalah dari matrix goals supaya 
+  // solusinya pasti ada
+  let board = getMatrixFromDom(goalsDom)
+  let zeropos_x = undefined, zeropos_y = undefined
   for (let i = 0; i < dimensiBoard; i++) {
     for (let j = 0; j < dimensiBoard; j++) {
-      inputsDom[i][j].value = numbers.shift()
+      if (inputsDom[i][j].value == 0) {
+        zeropos_x = j
+        zeropos_y = i
+        break
+      } 
+    }
+    if (zeropos_x != undefined && zeropos_y != undefined) break
+  }
+  console.log('swapAmount:',swapAmount);
+  for (let i = 0; i < swapAmount; i++) {
+    let isSwapped = false
+    do {
+      const swapDirection = random(0, 3) //random 0 - 3
+      // 0 = atas
+      // 1 = kanan
+      // 2 = bawah
+      // 3 = kiri
+      if (swapDirection == 0 && zeropos_y > 0) {
+        board = swap(board, zeropos_y, zeropos_x, zeropos_y - 1, zeropos_x)
+        isSwapped = true
+      }
+      else if (swapDirection == 1 && zeropos_x < 2) {
+        board = swap(board, zeropos_y, zeropos_x, zeropos_y, zeropos_x + 1)
+        isSwapped = true
+      }
+      else if (swapDirection == 2 && zeropos_y < 2) {
+        board = swap(board, zeropos_y, zeropos_x, zeropos_y + 1, zeropos_x)
+        isSwapped = true
+      }
+      else if (swapDirection == 3 && zeropos_x > 0) {
+        board = swap(board, zeropos_y, zeropos_x, zeropos_y, zeropos_x - 1)
+        isSwapped = true
+      }
+    } while(isSwapped == false)
+  }
+  for (let i = 0; i < inputsDom.length; i++) {
+    for (let j = 0; j < inputsDom[i].length; j++) {
+      inputsDom[i][j].value = board[i][j]
     }
   }
 }
 
 function randomGoalMatrix() {
-  const numbers = []
-  let randomValue;
-  for (let i = 0; numbers.length < Math.pow(dimensiBoard, 2); i++) {
-    randomValue = Math.floor(Math.random() * Math.pow(dimensiBoard, 2))
-    let isValid = true
-    for (let j = 0; j < numbers.length; j++) {
-      isValid &= !(randomValue == numbers[j])
-    }
-    if (isValid) numbers.push(randomValue)
-  }
+  const swapAmount = random(100, 150)
+  // karena kita random input matrix
+  // maka board awal yang akan digunakan
+  // adalah dari matrix inputs supaya 
+  // solusinya pasti ada
+  let board = getMatrixFromDom(inputsDom)
+  let zeropos_x = undefined, zeropos_y = undefined
   for (let i = 0; i < dimensiBoard; i++) {
     for (let j = 0; j < dimensiBoard; j++) {
-      goalsDom[i][j].value = numbers.shift()
+      if (goalsDom[i][j].value == 0) {
+        zeropos_x = j
+        zeropos_y = i
+        break
+      } 
+    }
+    if (zeropos_x != undefined && zeropos_y != undefined) break
+  }
+  for (let i = 0; i < swapAmount; i++) {
+    let isSwapped = false
+    do {
+      console.log("Attempt Swap");
+      const swapDirection = random(0, 3) //random 0 - 3
+      // 0 = atas
+      // 1 = kanan
+      // 2 = bawah
+      // 3 = kiri
+      if (swapDirection == 0 && zeropos_y > 0) {
+        board = swap(board, zeropos_y, zeropos_x, zeropos_y - 1, zeropos_x)
+        isSwapped = true
+      }
+      else if (swapDirection == 1 && zeropos_x < 2) {
+        board = swap(board, zeropos_y, zeropos_x, zeropos_y, zeropos_x + 1)
+        isSwapped = true
+      }
+      else if (swapDirection == 2 && zeropos_y < 2) {
+        board = swap(board, zeropos_y, zeropos_x, zeropos_y + 1, zeropos_x)
+        isSwapped = true
+      }
+      else if (swapDirection == 3 && zeropos_x > 0) {
+        board = swap(board, zeropos_y, zeropos_x, zeropos_y, zeropos_x - 1)
+        isSwapped = true
+      }
+    } while(isSwapped == false)
+  }
+  for (let i = 0; i < goalsDom.length; i++) {
+    for (let j = 0; j < goalsDom[i].length; j++) {
+      goalsDom[i][j].value = board[i][j]
     }
   }
+}
+
+/**
+ * Return matrix of value from the input element
+ * @param {HTML_Input_Dom[][]} doms the input element <input>
+ * @returns {Int[][]} matrix of doms value
+ */
+function getMatrixFromDom (doms) {
+  const matrix = new Array(doms.length)
+  for (let i = 0; i < doms.length; i++) {
+    matrix[i] = new Array(doms[i].length)
+    for (let j = 0; j < doms[i].length; j++) {
+      matrix[i][j] = doms[i][j].value
+    }
+  }
+  return matrix
+}
+
+function random(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
 
@@ -172,8 +260,7 @@ function BFS() {
 
     // add curr to done array
     done.push(curr);
-  } while (!isFinish(curr.board) || queue.isEmpty);
-
+  } while (!isFinish(curr.board, goals) || queue.isEmpty);
   console.log("done");
   console.log("Solution:");
   printSolution(done[done.length-1]);
@@ -186,16 +273,24 @@ function BFS() {
  * @param {Int[][]} board 
  * @returns {Boolean} True if board is goal state
  */
-function isFinish(board) {
-  return board[0][0] == 0 &&
-    board[0][1] == 1 &&
-    board[0][2] == 2 &&
-    board[1][0] == 3 &&
-    board[1][1] == 4 &&
-    board[1][2] == 5 &&
-    board[2][0] == 6 &&
-    board[2][1] == 7 &&
-    board[2][2] == 8
+function isFinish(board, goalMatrix) {
+  // return board[0][0] == 0 &&
+  //   board[0][1] == 1 &&
+  //   board[0][2] == 2 &&
+  //   board[1][0] == 3 &&
+  //   board[1][1] == 4 &&
+  //   board[1][2] == 5 &&
+  //   board[2][0] == 6 &&
+  //   board[2][1] == 7 &&
+  //   board[2][2] == 8
+  for (let i = 0; i < dimensiBoard; i++) {
+    for (let j = 0; j < dimensiBoard; j++) {
+      if (board[i][j] != goalMatrix[i][j]) {
+        return false
+      }
+    }
+  }
+  return true
 }
 
 /**
@@ -205,7 +300,7 @@ function isFinish(board) {
  * @param {Int} j1 
  * @param {Int} i2 
  * @param {Int} j2 
- * @returns {Int[][]}
+ * @returns {Int[][]} swappedArray
  */
 function swap(inputArr, i1, j1, i2, j2) {
   const array = [
