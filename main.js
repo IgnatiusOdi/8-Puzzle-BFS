@@ -33,12 +33,15 @@ function init() {
     goalsDom[y][x] = goal
     if (input == 0) zeropos = [y, x]
   }
+  randomInputMatrix()
+  randomGoalMatrix()
   console.log('inputsDom:',inputsDom)
   console.log('goalsDom:',goalsDom)
 }
 
 function randomInputMatrix() {
-  const swapAmount = random(100, 150)
+  const swapAmount = random(5, 10)
+  console.log('swapAmount:',swapAmount);
   // karena kita random input matrix
   // maka board awal yang akan digunakan
   // adalah dari matrix goals supaya 
@@ -55,16 +58,17 @@ function randomInputMatrix() {
     }
     if (zeropos_x != undefined && zeropos_y != undefined) break
   }
-  console.log('swapAmount:',swapAmount);
   for (let i = 0; i < swapAmount; i++) {
     let isSwapped = false
+    let lastSwapDirection = undefined
     do {
       const swapDirection = random(0, 3) //random 0 - 3
       // 0 = atas
       // 1 = kanan
       // 2 = bawah
       // 3 = kiri
-      if (swapDirection == 0 && zeropos_y > 0) {
+      if (lastSwapDirection == swapDirection) continue
+      else if (swapDirection == 0 && zeropos_y > 0) {
         board = swap(board, zeropos_y, zeropos_x, zeropos_y - 1, zeropos_x)
         isSwapped = true
       }
@@ -80,6 +84,7 @@ function randomInputMatrix() {
         board = swap(board, zeropos_y, zeropos_x, zeropos_y, zeropos_x - 1)
         isSwapped = true
       }
+      lastSwapDirection = swapDirection
     } while(isSwapped == false)
   }
   for (let i = 0; i < inputsDom.length; i++) {
@@ -90,7 +95,8 @@ function randomInputMatrix() {
 }
 
 function randomGoalMatrix() {
-  const swapAmount = random(100, 150)
+  const swapAmount = random(5, 10)
+  console.log('swapAmount:',swapAmount);
   // karena kita random input matrix
   // maka board awal yang akan digunakan
   // adalah dari matrix inputs supaya 
@@ -109,14 +115,15 @@ function randomGoalMatrix() {
   }
   for (let i = 0; i < swapAmount; i++) {
     let isSwapped = false
+    let lastSwapDirection = undefined
     do {
-      console.log("Attempt Swap");
       const swapDirection = random(0, 3) //random 0 - 3
       // 0 = atas
       // 1 = kanan
       // 2 = bawah
       // 3 = kiri
-      if (swapDirection == 0 && zeropos_y > 0) {
+      if (lastSwapDirection == swapDirection) continue
+      else if (swapDirection == 0 && zeropos_y > 0) {
         board = swap(board, zeropos_y, zeropos_x, zeropos_y - 1, zeropos_x)
         isSwapped = true
       }
@@ -132,6 +139,7 @@ function randomGoalMatrix() {
         board = swap(board, zeropos_y, zeropos_x, zeropos_y, zeropos_x - 1)
         isSwapped = true
       }
+      lastSwapDirection = swapDirection
     } while(isSwapped == false)
   }
   for (let i = 0; i < goalsDom.length; i++) {
