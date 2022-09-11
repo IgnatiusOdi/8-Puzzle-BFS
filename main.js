@@ -10,28 +10,28 @@ const State = class {
   }
 };
 
-const dimensiBoard = 3
+const dimensiBoard = 3;
 var inputsDom = [
   [-1, -1, -1],
   [-1, -1, -1],
   [-1, -1, -1],
-]
+];
 var goalsDom = [
   [-1, -1, -1],
   [-1, -1, -1],
   [-1, -1, -1],
-]
+];
 
 function init() {
   // pake traktor
   for (let i = 0; i < Math.pow(dimensiBoard, 2); i++) {
-    const y = Math.floor(i / 3)
-    const x = i % 3
-    const input = document.getElementById("input_" + (i + 1))
-    inputsDom[y][x] = input
-    const goal = document.getElementById("goal_" + (i + 1))
-    goalsDom[y][x] = goal
-    if (input == 0) zeropos = [y, x]
+    const y = Math.floor(i / 3);
+    const x = i % 3;
+    const input = document.getElementById("input_" + (i + 1));
+    inputsDom[y][x] = input;
+    const goal = document.getElementById("goal_" + (i + 1));
+    goalsDom[y][x] = goal;
+    if (input == 0) zeropos = [y, x];
   }
   randomInputMatrix()
   randomGoalMatrix()
@@ -44,25 +44,26 @@ function randomInputMatrix() {
   console.log('swapAmount:',swapAmount);
   // karena kita random input matrix
   // maka board awal yang akan digunakan
-  // adalah dari matrix goals supaya 
+  // adalah dari matrix goals supaya
   // solusinya pasti ada
-  let board = getMatrixFromDom(goalsDom)
-  let zeropos_x = undefined, zeropos_y = undefined
+  let board = getMatrixFromDom(goalsDom);
+  let zeropos_x = undefined,
+    zeropos_y = undefined;
   for (let i = 0; i < dimensiBoard; i++) {
     for (let j = 0; j < dimensiBoard; j++) {
       if (inputsDom[i][j].value == 0) {
-        zeropos_x = j
-        zeropos_y = i
-        break
-      } 
+        zeropos_x = j;
+        zeropos_y = i;
+        break;
+      }
     }
-    if (zeropos_x != undefined && zeropos_y != undefined) break
+    if (zeropos_x != undefined && zeropos_y != undefined) break;
   }
   for (let i = 0; i < swapAmount; i++) {
     let isSwapped = false
     let lastSwapDirection = undefined
     do {
-      const swapDirection = random(0, 3) //random 0 - 3
+      const swapDirection = random(0, 3); //random 0 - 3
       // 0 = atas
       // 1 = kanan
       // 2 = bawah
@@ -89,7 +90,7 @@ function randomInputMatrix() {
   }
   for (let i = 0; i < inputsDom.length; i++) {
     for (let j = 0; j < inputsDom[i].length; j++) {
-      inputsDom[i][j].value = board[i][j]
+      inputsDom[i][j].value = board[i][j];
     }
   }
 }
@@ -99,19 +100,20 @@ function randomGoalMatrix() {
   console.log('swapAmount:',swapAmount);
   // karena kita random input matrix
   // maka board awal yang akan digunakan
-  // adalah dari matrix inputs supaya 
+  // adalah dari matrix inputs supaya
   // solusinya pasti ada
-  let board = getMatrixFromDom(inputsDom)
-  let zeropos_x = undefined, zeropos_y = undefined
+  let board = getMatrixFromDom(inputsDom);
+  let zeropos_x = undefined,
+    zeropos_y = undefined;
   for (let i = 0; i < dimensiBoard; i++) {
     for (let j = 0; j < dimensiBoard; j++) {
       if (goalsDom[i][j].value == 0) {
-        zeropos_x = j
-        zeropos_y = i
-        break
-      } 
+        zeropos_x = j;
+        zeropos_y = i;
+        break;
+      }
     }
-    if (zeropos_x != undefined && zeropos_y != undefined) break
+    if (zeropos_x != undefined && zeropos_y != undefined) break;
   }
   for (let i = 0; i < swapAmount; i++) {
     let isSwapped = false
@@ -144,7 +146,7 @@ function randomGoalMatrix() {
   }
   for (let i = 0; i < goalsDom.length; i++) {
     for (let j = 0; j < goalsDom[i].length; j++) {
-      goalsDom[i][j].value = board[i][j]
+      goalsDom[i][j].value = board[i][j];
     }
   }
 }
@@ -154,59 +156,61 @@ function randomGoalMatrix() {
  * @param {HTML_Input_Dom[][]} doms the input element <input>
  * @returns {Int[][]} matrix of doms value
  */
-function getMatrixFromDom (doms) {
-  const matrix = new Array(doms.length)
+function getMatrixFromDom(doms) {
+  const matrix = new Array(doms.length);
   for (let i = 0; i < doms.length; i++) {
-    matrix[i] = new Array(doms[i].length)
+    matrix[i] = new Array(doms[i].length);
     for (let j = 0; j < doms[i].length; j++) {
-      matrix[i][j] = doms[i][j].value
+      matrix[i][j] = doms[i][j].value;
     }
   }
-  return matrix
+  return matrix;
 }
 
 function random(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min)
+  return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-
 function BFS() {
-  let zeropos = []
+  let zeropos = [];
   const inputs = [
     [-1, -1, -1],
     [-1, -1, -1],
     [-1, -1, -1],
-  ]
+  ];
   var goals = [
     [-1, -1, -1],
     [-1, -1, -1],
     [-1, -1, -1],
-  ]
+  ];
   // pake traktor
   for (let i = 0; i < Math.pow(dimensiBoard, 2); i++) {
-    const y = Math.floor(i / 3)
-    const x = i % 3
-    const input = document.getElementById("input_" + (i + 1)).value
-    inputs[y][x] = input
-    const goal = document.getElementById("goal_" + (i + 1)).value
-    goals[y][x] = goal
-    if (input == 0) zeropos = [y, x]
+    const y = Math.floor(i / 3);
+    const x = i % 3;
+    const input = document.getElementById("input_" + (i + 1)).value;
+    inputs[y][x] = input;
+    const goal = document.getElementById("goal_" + (i + 1)).value;
+    goals[y][x] = goal;
+    if (input == 0) zeropos = [y, x];
   }
 
   // AI PHASE START
   // LINK SUTARUTO!!
   var start = new State(inputs, zeropos[1], zeropos[0], "Root", undefined);
-  console.log('start:',start);
+  console.log("start:", start);
   var queue = new Queue();
   var done = new Array();
   queue.enqueue(start);
-  let ctr = 0
+  let ctr = 0;
   do {
-    console.log(`Iterasi ke-${++ctr}`);
+    ++ctr;
+    let message = `Iterasi ke-${ctr}`;
+    console.log(message);
+    document.getElementById("iterCount").innerHTML = `<div>${message}</div>`;
     var curr = queue.dequeue();
     console.log("sebelum swap");
     console.log("curr:", curr);
-    console.table(curr.board)
+    console.table(curr.board);
     if (curr.zeropos_x < 2) {
       // bisa ke kanan
       console.log("kanan");
@@ -215,10 +219,16 @@ function BFS() {
         curr.zeropos_y,
         curr.zeropos_x,
         curr.zeropos_y,
-        curr.zeropos_x + 1,
+        curr.zeropos_x + 1
       );
-      let newCurr = new State(newBoard, curr.zeropos_x + 1, curr.zeropos_y, "Right", curr);
-      if (!isReccurant(newCurr.board,done)) queue.enqueue(newCurr);
+      let newCurr = new State(
+        newBoard,
+        curr.zeropos_x + 1,
+        curr.zeropos_y,
+        "Right",
+        curr
+      );
+      if (!isReccurant(newCurr.board, done)) queue.enqueue(newCurr);
     }
     if (curr.zeropos_x > 0) {
       // bisa ke kiri
@@ -228,10 +238,16 @@ function BFS() {
         curr.zeropos_y,
         curr.zeropos_x,
         curr.zeropos_y,
-        curr.zeropos_x - 1,
+        curr.zeropos_x - 1
       );
-      let newCurr = new State(newBoard, curr.zeropos_x - 1, curr.zeropos_y, "Left", curr);
-      if (!isReccurant(newCurr.board,done)) queue.enqueue(newCurr);
+      let newCurr = new State(
+        newBoard,
+        curr.zeropos_x - 1,
+        curr.zeropos_y,
+        "Left",
+        curr
+      );
+      if (!isReccurant(newCurr.board, done)) queue.enqueue(newCurr);
     }
     if (curr.zeropos_y < 2) {
       // bisa ke bawah
@@ -241,10 +257,16 @@ function BFS() {
         curr.zeropos_y,
         curr.zeropos_x,
         curr.zeropos_y + 1,
-        curr.zeropos_x,
+        curr.zeropos_x
       );
-      let newCurr = new State(newBoard, curr.zeropos_x, curr.zeropos_y + 1, "Down", curr);
-      if (!isReccurant(newCurr.board,done)) queue.enqueue(newCurr);
+      let newCurr = new State(
+        newBoard,
+        curr.zeropos_x,
+        curr.zeropos_y + 1,
+        "Down",
+        curr
+      );
+      if (!isReccurant(newCurr.board, done)) queue.enqueue(newCurr);
     }
     if (curr.zeropos_y > 0) {
       // bisa ke atas
@@ -254,31 +276,82 @@ function BFS() {
         curr.zeropos_y,
         curr.zeropos_x,
         curr.zeropos_y - 1,
-        curr.zeropos_x,
+        curr.zeropos_x
       );
-      let newCurr = new State(newBoard, curr.zeropos_x, curr.zeropos_y - 1, "Up", curr);
-      if (!isReccurant(newCurr.board,done)) queue.enqueue(newCurr);
+      let newCurr = new State(
+        newBoard,
+        curr.zeropos_x,
+        curr.zeropos_y - 1,
+        "Up",
+        curr
+      );
+      if (!isReccurant(newCurr.board, done)) queue.enqueue(newCurr);
     }
     console.log("sesudah swap");
-    console.log('curr:',curr);
-    console.table(curr.board)
+    console.log("curr:", curr);
+    console.table(curr.board);
     if (ctr > 362880) {
-      break
-    };
+      break;
+    }
 
     // add curr to done array
     done.push(curr);
   } while (!isFinish(curr.board, goals) || queue.isEmpty);
   console.log("done");
   console.log("Solution:");
-  printSolution(done[done.length-1]);
+  printSolution(done[done.length - 1]);
   console.log("Solution Board:");
-  printSolutionBoard(done[done.length-1]);
+  printSolutionBoard(done[done.length - 1]);
+
+  // ADD SOLUTION BOARD TO HTML
+  document.getElementById("templateEpoch").removeAttribute("class");
+  let h1 = "<h1 class='font-medium text-lg'>Epoch " + ctr + "</h1>";
+  let htmlTable = `<table class="table-fixed text-xl"></table>`;
+  document.getElementById("templateEpoch").append(h1);
+  document.getElementById("templateEpoch").append(htmlTable);
+  // <h1 class="font-medium text-lg">Epoch 1</h1>
+  //           <table class="table-fixed text-xl">
+  //             <tbody>
+  //               <tr>
+  //                 <td class="border border-gray-600">
+  //                   <div class="text-center w-8 h-8">0</div>
+  //                 </td>
+  //                 <td class="border border-gray-600">
+  //                   <div class="text-center w-8 h-8">1</div>
+  //                 </td>
+  //                 <td class="border border-gray-600">
+  //                   <div class="text-center w-8 h-8">2</div>
+  //                 </td>
+  //               </tr>
+  //               <tr>
+  //                 <td class="border border-gray-600">
+  //                   <div class="text-center w-8 h-8">0</div>
+  //                 </td>
+  //                 <td class="border border-gray-600">
+  //                   <div class="text-center w-8 h-8">0</div>
+  //                 </td>
+  //                 <td class="border border-gray-600">
+  //                   <div class="text-center w-8 h-8">0</div>
+  //                 </td>
+  //               </tr>
+  //               <tr>
+  //                 <td class="border border-gray-600">
+  //                   <div class="text-center w-8 h-8">0</div>
+  //                 </td>
+  //                 <td class="border border-gray-600">
+  //                   <div class="text-center w-8 h-8">0</div>
+  //                 </td>
+  //                 <td class="border border-gray-600">
+  //                   <div class="text-center w-8 h-8">0</div>
+  //                 </td>
+  //               </tr>
+  //             </tbody>
+  //           </table>
 }
 
 /**
  * Function to check if the board is goal state
- * @param {Int[][]} board 
+ * @param {Int[][]} board
  * @returns {Boolean} True if board is goal state
  */
 function isFinish(board, goalMatrix) {
@@ -294,28 +367,24 @@ function isFinish(board, goalMatrix) {
   for (let i = 0; i < dimensiBoard; i++) {
     for (let j = 0; j < dimensiBoard; j++) {
       if (board[i][j] != goalMatrix[i][j]) {
-        return false
+        return false;
       }
     }
   }
-  return true
+  return true;
 }
 
 /**
  * Function to swap 2 element in 1 array
- * @param {Int[][]} inputArr 
- * @param {Int} i1 
- * @param {Int} j1 
- * @param {Int} i2 
- * @param {Int} j2 
+ * @param {Int[][]} inputArr
+ * @param {Int} i1
+ * @param {Int} j1
+ * @param {Int} i2
+ * @param {Int} j2
  * @returns {Int[][]} swappedArray
  */
 function swap(inputArr, i1, j1, i2, j2) {
-  const array = [
-    new Array(3),
-    new Array(3),
-    new Array(3),
-  ];
+  const array = [new Array(3), new Array(3), new Array(3)];
   for (let i = 0; i < inputArr.length; i++) {
     for (let j = 0; j < inputArr[i].length; j++) {
       array[i][j] = inputArr[i][j];
@@ -341,21 +410,21 @@ function swap(inputArr, i1, j1, i2, j2) {
 
 /**
  * function to check if a state is a reccurent one given a history array
- * @param {Int[][]} board 
- * @param {State[]} done 
+ * @param {Int[][]} board
+ * @param {State[]} done
  * @returns {Boolean} True if state is a reccurent state
  */
-function isReccurant(board, done){
+function isReccurant(board, done) {
   for (let x = 0; x < done.length; x++) {
     let sameCtr = 0;
     for (let i = 0; i < board.length; i++) {
       for (let j = 0; j < board[i].length; j++) {
-        if (done[x].board[i][j] == board[i][j]){
+        if (done[x].board[i][j] == board[i][j]) {
           sameCtr++;
         }
       }
     }
-    if (sameCtr == board.length * board[0].length){
+    if (sameCtr == board.length * board[0].length) {
       return true;
     }
   }
@@ -363,23 +432,23 @@ function isReccurant(board, done){
 }
 
 /**
- * function to print the solution given an end state  
- * @param {State} state 
+ * function to print the solution given an end state
+ * @param {State} state
  */
 function printSolution(state) {
   if (state.parent != undefined) {
-    printSolution(state.parent)
+    printSolution(state.parent);
   }
   console.log(state.step);
 }
 
 /**
- * function to print the solution board given an end state  
- * @param {State} state 
+ * function to print the solution board given an end state
+ * @param {State} state
  */
 function printSolutionBoard(state) {
   if (state.parent != undefined) {
-    printSolutionBoard(state.parent)
+    printSolutionBoard(state.parent);
   }
   console.table(state.board);
 }
