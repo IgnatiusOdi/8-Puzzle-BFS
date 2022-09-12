@@ -33,15 +33,15 @@ function init() {
     goalsDom[y][x] = goal;
     if (input == 0) zeropos = [y, x];
   }
-  randomInputMatrix()
-  randomGoalMatrix()
-  console.log('inputsDom:',inputsDom)
-  console.log('goalsDom:',goalsDom)
+  randomInputMatrix();
+  randomGoalMatrix();
+  console.log("inputsDom:", inputsDom);
+  console.log("goalsDom:", goalsDom);
 }
 
 function randomInputMatrix() {
-  const swapAmount = random(5, 10)
-  console.log('swapAmount:',swapAmount);
+  const swapAmount = random(5, 10);
+  console.log("swapAmount:", swapAmount);
   // karena kita random input matrix
   // maka board awal yang akan digunakan
   // adalah dari matrix goals supaya
@@ -60,44 +60,52 @@ function randomInputMatrix() {
     if (zeropos_x != undefined && zeropos_y != undefined) break;
   }
   for (let i = 0; i < swapAmount; i++) {
-    let isSwapped = false
-    let lastSwapDirection = undefined
+    let isSwapped = false;
+    let lastSwapDirection = undefined;
     do {
       const swapDirection = random(0, 3); //random 0 - 3
       // 0 = atas
       // 1 = kanan
       // 2 = bawah
       // 3 = kiri
-      if (lastSwapDirection == swapDirection) continue
+      if (lastSwapDirection == swapDirection) continue;
       else if (swapDirection == 0 && zeropos_y > 0) {
-        board = swap(board, zeropos_y, zeropos_x, zeropos_y - 1, zeropos_x)
-        isSwapped = true
+        board = swap(board, zeropos_y, zeropos_x, zeropos_y - 1, zeropos_x);
+        isSwapped = true;
+      } else if (swapDirection == 1 && zeropos_x < 2) {
+        board = swap(board, zeropos_y, zeropos_x, zeropos_y, zeropos_x + 1);
+        isSwapped = true;
+      } else if (swapDirection == 2 && zeropos_y < 2) {
+        board = swap(board, zeropos_y, zeropos_x, zeropos_y + 1, zeropos_x);
+        isSwapped = true;
+      } else if (swapDirection == 3 && zeropos_x > 0) {
+        board = swap(board, zeropos_y, zeropos_x, zeropos_y, zeropos_x - 1);
+        isSwapped = true;
       }
-      else if (swapDirection == 1 && zeropos_x < 2) {
-        board = swap(board, zeropos_y, zeropos_x, zeropos_y, zeropos_x + 1)
-        isSwapped = true
-      }
-      else if (swapDirection == 2 && zeropos_y < 2) {
-        board = swap(board, zeropos_y, zeropos_x, zeropos_y + 1, zeropos_x)
-        isSwapped = true
-      }
-      else if (swapDirection == 3 && zeropos_x > 0) {
-        board = swap(board, zeropos_y, zeropos_x, zeropos_y, zeropos_x - 1)
-        isSwapped = true
-      }
-      lastSwapDirection = swapDirection
-    } while(isSwapped == false)
+      lastSwapDirection = swapDirection;
+    } while (isSwapped == false);
   }
   for (let i = 0; i < inputsDom.length; i++) {
     for (let j = 0; j < inputsDom[i].length; j++) {
       inputsDom[i][j].value = board[i][j];
     }
   }
+
+  //TEST
+  inputsDom[0][0].value = 0;
+  inputsDom[0][1].value = 1;
+  inputsDom[0][2].value = 2;
+  inputsDom[1][0].value = 3;
+  inputsDom[1][1].value = 4;
+  inputsDom[1][2].value = 5;
+  inputsDom[2][0].value = 6;
+  inputsDom[2][1].value = 7;
+  inputsDom[2][2].value = 8;
 }
 
 function randomGoalMatrix() {
-  const swapAmount = random(5, 10)
-  console.log('swapAmount:',swapAmount);
+  const swapAmount = random(5, 10);
+  console.log("swapAmount:", swapAmount);
   // karena kita random input matrix
   // maka board awal yang akan digunakan
   // adalah dari matrix inputs supaya
@@ -116,39 +124,47 @@ function randomGoalMatrix() {
     if (zeropos_x != undefined && zeropos_y != undefined) break;
   }
   for (let i = 0; i < swapAmount; i++) {
-    let isSwapped = false
-    let lastSwapDirection = undefined
+    let isSwapped = false;
+    let lastSwapDirection = undefined;
     do {
-      const swapDirection = random(0, 3) //random 0 - 3
+      const swapDirection = random(0, 3); //random 0 - 3
       // 0 = atas
       // 1 = kanan
       // 2 = bawah
       // 3 = kiri
-      if (lastSwapDirection == swapDirection) continue
+      if (lastSwapDirection == swapDirection) continue;
       else if (swapDirection == 0 && zeropos_y > 0) {
-        board = swap(board, zeropos_y, zeropos_x, zeropos_y - 1, zeropos_x)
-        isSwapped = true
+        board = swap(board, zeropos_y, zeropos_x, zeropos_y - 1, zeropos_x);
+        isSwapped = true;
+      } else if (swapDirection == 1 && zeropos_x < 2) {
+        board = swap(board, zeropos_y, zeropos_x, zeropos_y, zeropos_x + 1);
+        isSwapped = true;
+      } else if (swapDirection == 2 && zeropos_y < 2) {
+        board = swap(board, zeropos_y, zeropos_x, zeropos_y + 1, zeropos_x);
+        isSwapped = true;
+      } else if (swapDirection == 3 && zeropos_x > 0) {
+        board = swap(board, zeropos_y, zeropos_x, zeropos_y, zeropos_x - 1);
+        isSwapped = true;
       }
-      else if (swapDirection == 1 && zeropos_x < 2) {
-        board = swap(board, zeropos_y, zeropos_x, zeropos_y, zeropos_x + 1)
-        isSwapped = true
-      }
-      else if (swapDirection == 2 && zeropos_y < 2) {
-        board = swap(board, zeropos_y, zeropos_x, zeropos_y + 1, zeropos_x)
-        isSwapped = true
-      }
-      else if (swapDirection == 3 && zeropos_x > 0) {
-        board = swap(board, zeropos_y, zeropos_x, zeropos_y, zeropos_x - 1)
-        isSwapped = true
-      }
-      lastSwapDirection = swapDirection
-    } while(isSwapped == false)
+      lastSwapDirection = swapDirection;
+    } while (isSwapped == false);
   }
   for (let i = 0; i < goalsDom.length; i++) {
     for (let j = 0; j < goalsDom[i].length; j++) {
       goalsDom[i][j].value = board[i][j];
     }
   }
+
+  //TEST
+  goalsDom[0][0].value = 1;
+  goalsDom[0][1].value = 2;
+  goalsDom[0][2].value = 5;
+  goalsDom[1][0].value = 3;
+  goalsDom[1][1].value = 4;
+  goalsDom[1][2].value = 8;
+  goalsDom[2][0].value = 6;
+  goalsDom[2][1].value = 7;
+  goalsDom[2][2].value = 0;
 }
 
 /**
@@ -196,6 +212,9 @@ function BFS() {
 
   // AI PHASE START
   // LINK SUTARUTO!!
+  let message = `Loading...`;
+  document.getElementById("iterCount").innerHTML = `<div>${message}</div>`;
+
   var start = new State(inputs, zeropos[1], zeropos[0], "Root", undefined);
   console.log("start:", start);
   var queue = new Queue();
@@ -204,7 +223,7 @@ function BFS() {
   let ctr = 0;
   do {
     ++ctr;
-    let message = `Iterasi ke-${ctr}`;
+    message = `Selesai pada iterasi ke-${ctr}`;
     console.log(message);
     document.getElementById("iterCount").innerHTML = `<div>${message}</div>`;
     var curr = queue.dequeue();
@@ -300,53 +319,14 @@ function BFS() {
   console.log("done");
   console.log("Solution:");
   printSolution(done[done.length - 1]);
+
+  // CLEAN HTML SOLUTION BOARD
+  document.getElementById("templateEpoch").removeAttribute("class");
+  document.getElementById("templateEpoch").innerHTML = "";
+
   console.log("Solution Board:");
   printSolutionBoard(done[done.length - 1]);
-
-  // ADD SOLUTION BOARD TO HTML
-  document.getElementById("templateEpoch").removeAttribute("class");
-  let h1 = "<h1 class='font-medium text-lg'>Epoch " + ctr + "</h1>";
-  let htmlTable = `<table class="table-fixed text-xl"></table>`;
-  document.getElementById("templateEpoch").append(h1);
-  document.getElementById("templateEpoch").append(htmlTable);
-  // <h1 class="font-medium text-lg">Epoch 1</h1>
-  //           <table class="table-fixed text-xl">
-  //             <tbody>
-  //               <tr>
-  //                 <td class="border border-gray-600">
-  //                   <div class="text-center w-8 h-8">0</div>
-  //                 </td>
-  //                 <td class="border border-gray-600">
-  //                   <div class="text-center w-8 h-8">1</div>
-  //                 </td>
-  //                 <td class="border border-gray-600">
-  //                   <div class="text-center w-8 h-8">2</div>
-  //                 </td>
-  //               </tr>
-  //               <tr>
-  //                 <td class="border border-gray-600">
-  //                   <div class="text-center w-8 h-8">0</div>
-  //                 </td>
-  //                 <td class="border border-gray-600">
-  //                   <div class="text-center w-8 h-8">0</div>
-  //                 </td>
-  //                 <td class="border border-gray-600">
-  //                   <div class="text-center w-8 h-8">0</div>
-  //                 </td>
-  //               </tr>
-  //               <tr>
-  //                 <td class="border border-gray-600">
-  //                   <div class="text-center w-8 h-8">0</div>
-  //                 </td>
-  //                 <td class="border border-gray-600">
-  //                   <div class="text-center w-8 h-8">0</div>
-  //                 </td>
-  //                 <td class="border border-gray-600">
-  //                   <div class="text-center w-8 h-8">0</div>
-  //                 </td>
-  //               </tr>
-  //             </tbody>
-  //           </table>
+  console.log(done[done.length - 1]);
 }
 
 /**
@@ -451,4 +431,36 @@ function printSolutionBoard(state) {
     printSolutionBoard(state.parent);
   }
   console.table(state.board);
+
+  //ADD h1
+  let h1 = document.createElement("h1");
+  // h1.setAttribute("id", `Epoch${i + 1}`);
+  h1.setAttribute("class", "font-medium text-lg");
+  h1.innerHTML = state.step;
+
+  //ADD table
+  let table = document.createElement("table");
+  // table.setAttribute("id", `tableEpoch${i + 1}`);
+  table.setAttribute("class", "table-fixed text-xl");
+  let tbody = document.createElement("tbody");
+  table.append(tbody);
+  for (let j = 0; j < 3; j++) {
+    let tr = document.createElement("tr");
+    // tr.setAttribute("id", `trEpoch${i + 1}[${j}]`);
+    tbody.append(tr);
+    for (let k = 0; k < 3; k++) {
+      let td = document.createElement("td");
+      let div = document.createElement("div");
+      td.setAttribute("class", "border border-gray-600");
+      div.setAttribute("class", "text-center w-8 h-8");
+      // td.setAttribute("id", `tdEpoch${i + 1}[${j}][${k}]`);
+      tr.append(td);
+      // div.setAttribute("id", `divEpoch${i + 1}[${j}][${k}]`);
+      td.append(div);
+      div.innerHTML = state.board[j][k];
+    }
+  }
+
+  document.getElementById("templateEpoch").append(h1);
+  document.getElementById("templateEpoch").append(table);
 }
