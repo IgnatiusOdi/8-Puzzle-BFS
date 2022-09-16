@@ -1,12 +1,41 @@
 // 1 state adalah snapshot papan
 // bisa lebih bagus jika posisi 0 juga dicatat
 const State = class {
+  /**
+   * Constructor for State Class
+   * @param {Int[][]} board 3*3 array containing puzzle board
+   * @param {Int} zeropos_x x position of tile 0
+   * @param {Int} zeropos_y y position of tile 0
+   * @param {String} step step taken from parent
+   * @param {State} parent parent state
+   */
   constructor(board, zeropos_x, zeropos_y, step, parent) {
     this.board = board;
     this.zeropos_x = zeropos_x;
     this.zeropos_y = zeropos_y;
     this.step = step;
     this.parent = parent;
+    if (parent == undefined) 
+      this.g = 0;
+    else
+      this.g = parent.g + 1;
+  }
+
+  /**
+   * method to calculate F score
+   * @param {Int[][]} goalBoard 3*3 array containing goal board
+   * @returns f score
+   */
+  calculateF(goalBoard){
+    let f = this.g;
+    for (let i = 0; i < goalBoard.length; i++) {
+      for (let j = 0; j < goalBoard.length; j++) {
+        if (this.board[i][j] != goalBoard[i][j]){
+          f++ ;
+        }
+      }
+    }
+    return f
   }
 };
 
@@ -330,20 +359,159 @@ function BFS() {
 }
 
 /**
+ * solve board using A* algorithm
+ */
+function Astar() {
+  let zeropos = [];
+  const inputs = [
+    [-1, -1, -1],
+    [-1, -1, -1],
+    [-1, -1, -1],
+  ];
+  var goals = [
+    [-1, -1, -1],
+    [-1, -1, -1],
+    [-1, -1, -1],
+  ];
+  // pake traktor
+  for (let i = 0; i < Math.pow(dimensiBoard, 2); i++) {
+    const y = Math.floor(i / 3);
+    const x = i % 3;
+    const input = document.getElementById("input_" + (i + 1)).value;
+    inputs[y][x] = input;
+    const goal = document.getElementById("goal_" + (i + 1)).value;
+    goals[y][x] = goal;
+    if (input == 0) zeropos = [y, x];
+  }
+
+  // A* start
+  let message = `Loading...`;
+  document.getElementById("iterCount").innerHTML = `<div>${message}</div>`;
+
+  var start = new State(inputs, zeropos[1], zeropos[0], "Root", undefined);
+  console.log("start:", start);
+  var queue = new PriorityQueue();
+  var done = new Array();
+  queue.enqueue(start,start.calculateF(goals));
+  let ctr = 0;
+  do {
+    ++ctr;
+    message = `Selesai pada iterasi ke-${ctr}`;
+    console.log(message);
+    document.getElementById("iterCount").innerHTML = `<div>${message}</div>`;
+    var curr = queue.dequeue();
+    console.log("sebelum swap");
+    console.log("curr:", curr);
+    console.table(curr.board);
+    if (curr.zeropos_x < 2) {
+      // bisa ke kanan
+      console.log("kanan");
+      let newBoard = swap(
+        curr.board,
+        curr.zeropos_y,
+        curr.zeropos_x,
+        curr.zeropos_y,
+        curr.zeropos_x + 1
+      );
+      let newCurr = new State(
+        newBoard,
+        curr.zeropos_x + 1,
+        curr.zeropos_y,
+        "Right",
+        curr
+      );
+      // if (!isReccurant(newCurr.board, done))
+      queue.enqueue(newCurr,newCurr.calculateF(goals));
+    }
+    if (curr.zeropos_x > 0) {
+      // bisa ke kiri
+      console.log("kiri");
+      let newBoard = swap(
+        curr.board,
+        curr.zeropos_y,
+        curr.zeropos_x,
+        curr.zeropos_y,
+        curr.zeropos_x - 1
+      );
+      let newCurr = new State(
+        newBoard,
+        curr.zeropos_x - 1,
+        curr.zeropos_y,
+        "Left",
+        curr
+      );
+      // if (!isReccurant(newCurr.board, done))
+      queue.enqueue(newCurr,newCurr.calculateF(goals));
+    }
+    if (curr.zeropos_y < 2) {
+      // bisa ke bawah
+      console.log("bawah");
+      let newBoard = swap(
+        curr.board,
+        curr.zeropos_y,
+        curr.zeropos_x,
+        curr.zeropos_y + 1,
+        curr.zeropos_x
+      );
+      let newCurr = new State(
+        newBoard,
+        curr.zeropos_x,
+        curr.zeropos_y + 1,
+        "Down",
+        curr
+      );
+      // if (!isReccurant(newCurr.board, done))
+      queue.enqueue(newCurr,newCurr.calculateF(goals));
+    }
+    if (curr.zeropos_y > 0) {
+      // bisa ke atas
+      console.log("atas");
+      let newBoard = swap(
+        curr.board,
+        curr.zeropos_y,
+        curr.zeropos_x,
+        curr.zeropos_y - 1,
+        curr.zeropos_x
+      );
+      let newCurr = new State(
+        newBoard,
+        curr.zeropos_x,
+        curr.zeropos_y - 1,
+        "Up",
+        curr
+      );
+      // if (!isReccurant(newCurr.board, done))
+      queue.enqueue(newCurr,newCurr.calculateF(goals));
+    }
+    console.log("sesudah swap");
+    console.log("curr:", curr);
+    console.table(curr.board);
+    if (ctr > 362880) {
+      break;
+    }
+
+    // add curr to done array
+    done.push(curr);
+  } while (!isFinish(curr.board, goals) || queue.isEmpty);
+  console.log("done");
+  console.log("Solution:");
+  printSolution(done[done.length - 1]);
+
+  // CLEAN HTML SOLUTION BOARD
+  document.getElementById("templateEpoch").removeAttribute("class");
+  document.getElementById("templateEpoch").innerHTML = "";
+
+  console.log("Solution Board:");
+  printSolutionBoard(done[done.length - 1]);
+  console.log(done[done.length - 1]);
+}
+
+/**
  * Function to check if the board is goal state
  * @param {Int[][]} board
  * @returns {Boolean} True if board is goal state
  */
 function isFinish(board, goalMatrix) {
-  // return board[0][0] == 0 &&
-  //   board[0][1] == 1 &&
-  //   board[0][2] == 2 &&
-  //   board[1][0] == 3 &&
-  //   board[1][1] == 4 &&
-  //   board[1][2] == 5 &&
-  //   board[2][0] == 6 &&
-  //   board[2][1] == 7 &&
-  //   board[2][2] == 8
   for (let i = 0; i < dimensiBoard; i++) {
     for (let j = 0; j < dimensiBoard; j++) {
       if (board[i][j] != goalMatrix[i][j]) {
