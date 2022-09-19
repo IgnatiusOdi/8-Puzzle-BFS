@@ -1,5 +1,4 @@
 // 1 state adalah snapshot papan
-// bisa lebih bagus jika posisi 0 juga dicatat
 const State = class {
   /**
    * Constructor for State Class
@@ -56,6 +55,9 @@ var domInputSwapAmount = undefined
 var maxEpoch = undefined;
 var domInputMaxEpoch = undefined
 
+/**
+ * Init func to prepare variables
+ */
 function init() {
   // pake traktor
   for (let i = 0; i < Math.pow(dimensiBoard, 2); i++) {
@@ -81,12 +83,18 @@ function onChangeMaxEpoch() {
   maxEpoch = domInputMaxEpoch.value
 }
 
+/**
+ * randomly generate start and goal matrix
+ */
 function randomMatrix() {
   randomInputMatrix()
   randomGoalMatrix()
   console.log('RandomMatrix');
 }
 
+/**
+ * randomly generate start matrix
+ */
 function randomInputMatrix() {
   // karena kita random input matrix
   // maka board awal yang akan digunakan
@@ -149,6 +157,9 @@ function randomInputMatrix() {
   // inputsDom[2][2].value = 8;
 }
 
+/**
+ * randomly generate goal matrix
+ */
 function randomGoalMatrix() {
   // karena kita random input matrix
   // maka board awal yang akan digunakan
