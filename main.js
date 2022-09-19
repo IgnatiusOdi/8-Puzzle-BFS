@@ -97,7 +97,7 @@ function randomInputMatrix() {
       // 1 = kanan
       // 2 = bawah
       // 3 = kiri
-      if (lastSwapDirection == swapDirection) continue;
+      if (isOppositeDirection(lastSwapDirection, swapDirection)) continue;
       else if (swapDirection == 0 && zeropos_y > 0) {
         board = swap(board, zeropos_y, zeropos_x, zeropos_y - 1, zeropos_x);
         isSwapped = true;
@@ -161,7 +161,7 @@ function randomGoalMatrix() {
       // 1 = kanan
       // 2 = bawah
       // 3 = kiri
-      if (lastSwapDirection == swapDirection) continue;
+      if (isOppositeDirection(lastSwapDirection, swapDirection)) continue;
       else if (swapDirection == 0 && zeropos_y > 0) {
         board = swap(board, zeropos_y, zeropos_x, zeropos_y - 1, zeropos_x);
         isSwapped = true;
@@ -194,6 +194,17 @@ function randomGoalMatrix() {
   goalsDom[2][0].value = 6;
   goalsDom[2][1].value = 7;
   goalsDom[2][2].value = 0;
+}
+
+function isOppositeDirection(first, second) {
+  if (
+      (first == 0 && second == 3) || 
+      (first == 3 && second == 0) ||
+      (first == 1 && second == 2) ||
+      (first == 2 && second == 1)
+      ) {
+    return true
+  }
 }
 
 /**
