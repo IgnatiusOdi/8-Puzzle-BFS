@@ -100,12 +100,14 @@ function randomInputMatrix() {
   // maka board awal yang akan digunakan
   // adalah dari matrix goals supaya
   // solusinya pasti ada
+  console.log("random input")
   let board = getMatrixFromDom(goalsDom);
+  console.table(board)
   let zeropos_x = undefined,
     zeropos_y = undefined;
   for (let i = 0; i < dimensiBoard; i++) {
     for (let j = 0; j < dimensiBoard; j++) {
-      if (inputsDom[i][j].value == 0) {
+      if (goalsDom[i][j].value == 0) {
         zeropos_x = j;
         zeropos_y = i;
         break;
@@ -113,9 +115,9 @@ function randomInputMatrix() {
     }
     if (zeropos_x != undefined && zeropos_y != undefined) break;
   }
+  let lastSwapDirection = undefined;
   for (let i = 0; i < swapAmount; i++) {
     let isSwapped = false;
-    let lastSwapDirection = undefined;
     do {
       const swapDirection = random(0, 3); //random 0 - 3
       // 0 = atas
@@ -126,17 +128,28 @@ function randomInputMatrix() {
       else if (swapDirection == 0 && zeropos_y > 0) {
         board = swap(board, zeropos_y, zeropos_x, zeropos_y - 1, zeropos_x);
         isSwapped = true;
+        zeropos_y --;
+        lastSwapDirection = swapDirection;
+        console.table(board);
       } else if (swapDirection == 1 && zeropos_x < 2) {
         board = swap(board, zeropos_y, zeropos_x, zeropos_y, zeropos_x + 1);
         isSwapped = true;
+        zeropos_x ++;
+        lastSwapDirection = swapDirection;
+        console.table(board);
       } else if (swapDirection == 2 && zeropos_y < 2) {
         board = swap(board, zeropos_y, zeropos_x, zeropos_y + 1, zeropos_x);
         isSwapped = true;
+        zeropos_y ++;
+        lastSwapDirection = swapDirection;
+        console.table(board);
       } else if (swapDirection == 3 && zeropos_x > 0) {
         board = swap(board, zeropos_y, zeropos_x, zeropos_y, zeropos_x - 1);
         isSwapped = true;
+        zeropos_x --;
+        lastSwapDirection = swapDirection;
+        console.table(board);
       }
-      lastSwapDirection = swapDirection;
     } while (isSwapped == false);
   }
   for (let i = 0; i < inputsDom.length; i++) {
@@ -165,12 +178,14 @@ function randomGoalMatrix() {
   // maka board awal yang akan digunakan
   // adalah dari matrix inputs supaya
   // solusinya pasti ada
+  console.log('random goal')
   let board = getMatrixFromDom(inputsDom);
+  console.table(board)
   let zeropos_x = undefined,
     zeropos_y = undefined;
   for (let i = 0; i < dimensiBoard; i++) {
     for (let j = 0; j < dimensiBoard; j++) {
-      if (goalsDom[i][j].value == 0) {
+      if (inputsDom[i][j].value == 0) {
         zeropos_x = j;
         zeropos_y = i;
         break;
@@ -178,9 +193,9 @@ function randomGoalMatrix() {
     }
     if (zeropos_x != undefined && zeropos_y != undefined) break;
   }
+  let lastSwapDirection = undefined;
   for (let i = 0; i < swapAmount; i++) {
     let isSwapped = false;
-    let lastSwapDirection = undefined;
     do {
       const swapDirection = random(0, 3); //random 0 - 3
       // 0 = atas
@@ -190,18 +205,29 @@ function randomGoalMatrix() {
       if (isOppositeDirection(lastSwapDirection, swapDirection)) continue;
       else if (swapDirection == 0 && zeropos_y > 0) {
         board = swap(board, zeropos_y, zeropos_x, zeropos_y - 1, zeropos_x);
+        zeropos_y --;
         isSwapped = true;
+        lastSwapDirection = swapDirection;
+        console.table(board);
       } else if (swapDirection == 1 && zeropos_x < 2) {
         board = swap(board, zeropos_y, zeropos_x, zeropos_y, zeropos_x + 1);
+        zeropos_x ++;
         isSwapped = true;
+        lastSwapDirection = swapDirection;
+        console.table(board);
       } else if (swapDirection == 2 && zeropos_y < 2) {
         board = swap(board, zeropos_y, zeropos_x, zeropos_y + 1, zeropos_x);
+        zeropos_y ++;
         isSwapped = true;
+        lastSwapDirection = swapDirection;
+        console.table(board);
       } else if (swapDirection == 3 && zeropos_x > 0) {
         board = swap(board, zeropos_y, zeropos_x, zeropos_y, zeropos_x - 1);
+        zeropos_x --;
         isSwapped = true;
+        lastSwapDirection = swapDirection;
+        console.table(board);
       }
-      lastSwapDirection = swapDirection;
     } while (isSwapped == false);
   }
   for (let i = 0; i < goalsDom.length; i++) {
@@ -223,14 +249,12 @@ function randomGoalMatrix() {
 }
 
 function isOppositeDirection(first, second) {
-  if (
-      (first == 0 && second == 3) || 
-      (first == 3 && second == 0) ||
-      (first == 1 && second == 2) ||
-      (first == 2 && second == 1)
-      ) {
-    return true
-  }
+  return (
+    (first == 0 && second == 2) || 
+    (first == 2 && second == 0) ||
+    (first == 1 && second == 3) ||
+    (first == 3 && second == 1)
+  )
 }
 
 /**
@@ -375,8 +399,10 @@ function BFS() {
     console.log("sesudah swap");
     console.log("curr:", curr);
     console.table(curr.board);
-    if (ctr > maxEpoch) {
-      console.log("Sampai max epoch yang di tentukan");
+    if (ctr >= maxEpoch) {
+      message = `Sampai max epoch yang di tentukan (${ctr})`;
+      console.log(message);
+      document.getElementById("iterCount").innerHTML = `<div>${message}</div>`;
       break;
     }
 
@@ -524,8 +550,10 @@ function Astar() {
     console.log("sesudah swap");
     console.log("curr:", curr);
     console.table(curr.board);
-    if (ctr > maxEpoch) {
-      console.log("Sampai max epoch yang di tentukan");
+    if (ctr >= maxEpoch) {
+      message = `Sampai max epoch yang di tentukan (${ctr})`;
+      console.log(message);
+      document.getElementById("iterCount").innerHTML = `<div>${message}</div>`;
       break;
     }
 
