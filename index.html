@@ -122,14 +122,14 @@
               </tr>
             </tbody>
           </table>
-          <div class="flex justify-end">
+          <!-- <div class="flex justify-end">
             <button
               class="w-8 h-8 border border-gray-800 mt-2 text-gray-50 bg-indigo-700 active:bg-gray-200 active:text-indigo-700 focus:ring focus:ring-indigo-200 rounded font-semibold"
               onclick="randomInputMatrix()"
             >
               <i class="fa-solid fa-shuffle"></i>
             </button>
-          </div>
+          </div> -->
           <h1 class="font-semibold text-xl mt-2">Goal Matrix</h1>
           <table class="table-fixed text-xl w-full">
             <tbody>
@@ -231,13 +231,27 @@
               </tr>
             </tbody>
           </table>
-          <div class="flex justify-end">
+          <!-- <div class="flex justify-end">
             <button
               class="w-8 h-8 border border-gray-800 mt-2 text-gray-50 bg-indigo-700 active:bg-gray-200 active:text-indigo-700 focus:ring focus:ring-indigo-200 rounded font-semibold"
               onclick="randomGoalMatrix()"
             >
               <i class="fa-solid fa-shuffle"></i>
             </button>
+          </div> -->
+          <h2 class="text-lg font-semibold mt-2">Random Amount: </h2>
+          <div class="flex w-full">
+            <input id="inputSwapAmount" class="shrink min-w-0 border border-gray-800 rounded-l border-r-0 px-1" type="number" onchange="onChangeSwapAmount()" min="1" value="1">
+            <button
+              class="flex-none w-8 h-8 border border-gray-800 text-gray-50 bg-indigo-700 active:bg-gray-200 active:text-indigo-700 focus:ring focus:ring-indigo-200 font-semibold rounded-r border-l-0"
+              onclick="randomMatrix()"
+            >
+              <i class="fa-solid fa-shuffle"></i>
+            </button>
+          </div>
+          <h2 class="text-lg font-semibold mt-2">Max Epoch: </h2>
+          <div class="flex w-full">
+            <input id="inputMaxEpoch" class="shrink min-w-full border border-gray-800 px-1" type="number" onchange="onChangeMaxEpoch()" min="3" value="100">
           </div>
           <button
             class="w-full py-2 px-1 border border-gray-800 mt-2 text-gray-50 bg-indigo-700 active:bg-gray-200 active:text-indigo-700 focus:ring focus:ring-indigo-200 rounded font-semibold"

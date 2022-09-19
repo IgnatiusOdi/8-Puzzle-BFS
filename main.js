@@ -50,6 +50,11 @@ var goalsDom = [
   [-1, -1, -1],
   [-1, -1, -1],
 ];
+var swapAmount = undefined;
+var domInputSwapAmount = undefined
+
+var maxEpoch = undefined;
+var domInputMaxEpoch = undefined
 
 function init() {
   // pake traktor
@@ -62,15 +67,27 @@ function init() {
     goalsDom[y][x] = goal;
     if (input == 0) zeropos = [y, x];
   }
-  randomInputMatrix();
-  randomGoalMatrix();
-  console.log("inputsDom:", inputsDom);
-  console.log("goalsDom:", goalsDom);
+  domInputSwapAmount = document.getElementById('inputSwapAmount')
+  swapAmount = domInputSwapAmount.value
+  domInputMaxEpoch = document.getElementById('inputMaxEpoch')
+  maxEpoch = domInputMaxEpoch.value
+}
+
+function onChangeSwapAmount() {
+  swapAmount = domInputSwapAmount.value
+}
+
+function onChangeMaxEpoch() {
+  maxEpoch = domInputMaxEpoch.value
+}
+
+function randomMatrix() {
+  randomInputMatrix()
+  randomGoalMatrix()
+  console.log('RandomMatrix');
 }
 
 function randomInputMatrix() {
-  const swapAmount = random(5, 10);
-  console.log("swapAmount:", swapAmount);
   // karena kita random input matrix
   // maka board awal yang akan digunakan
   // adalah dari matrix goals supaya
@@ -121,20 +138,18 @@ function randomInputMatrix() {
   }
 
   //TEST
-  inputsDom[0][0].value = 0;
-  inputsDom[0][1].value = 1;
-  inputsDom[0][2].value = 2;
-  inputsDom[1][0].value = 3;
-  inputsDom[1][1].value = 4;
-  inputsDom[1][2].value = 5;
-  inputsDom[2][0].value = 6;
-  inputsDom[2][1].value = 7;
-  inputsDom[2][2].value = 8;
+  // inputsDom[0][0].value = 0;
+  // inputsDom[0][1].value = 1;
+  // inputsDom[0][2].value = 2;
+  // inputsDom[1][0].value = 3;
+  // inputsDom[1][1].value = 4;
+  // inputsDom[1][2].value = 5;
+  // inputsDom[2][0].value = 6;
+  // inputsDom[2][1].value = 7;
+  // inputsDom[2][2].value = 8;
 }
 
 function randomGoalMatrix() {
-  const swapAmount = random(5, 10);
-  console.log("swapAmount:", swapAmount);
   // karena kita random input matrix
   // maka board awal yang akan digunakan
   // adalah dari matrix inputs supaya
@@ -185,15 +200,15 @@ function randomGoalMatrix() {
   }
 
   //TEST
-  goalsDom[0][0].value = 1;
-  goalsDom[0][1].value = 2;
-  goalsDom[0][2].value = 5;
-  goalsDom[1][0].value = 3;
-  goalsDom[1][1].value = 4;
-  goalsDom[1][2].value = 8;
-  goalsDom[2][0].value = 6;
-  goalsDom[2][1].value = 7;
-  goalsDom[2][2].value = 0;
+  // goalsDom[0][0].value = 1;
+  // goalsDom[0][1].value = 2;
+  // goalsDom[0][2].value = 5;
+  // goalsDom[1][0].value = 3;
+  // goalsDom[1][1].value = 4;
+  // goalsDom[1][2].value = 8;
+  // goalsDom[2][0].value = 6;
+  // goalsDom[2][1].value = 7;
+  // goalsDom[2][2].value = 0;
 }
 
 function isOppositeDirection(first, second) {
@@ -349,7 +364,8 @@ function BFS() {
     console.log("sesudah swap");
     console.log("curr:", curr);
     console.table(curr.board);
-    if (ctr > 362880) {
+    if (ctr > maxEpoch) {
+      console.log("Sampai max epoch yang di tentukan");
       break;
     }
 
@@ -497,7 +513,8 @@ function Astar() {
     console.log("sesudah swap");
     console.log("curr:", curr);
     console.table(curr.board);
-    if (ctr > 362880) {
+    if (ctr > maxEpoch) {
+      console.log("Sampai max epoch yang di tentukan");
       break;
     }
 
