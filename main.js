@@ -14,10 +14,8 @@ const State = class {
     this.zeropos_y = zeropos_y;
     this.step = step;
     this.parent = parent;
-    if (parent == undefined) 
-      this.g = 0;
-    else
-      this.g = parent.g + 1;
+    if (parent == undefined) this.g = 0;
+    else this.g = parent.g + 1;
   }
 
   /**
@@ -25,16 +23,16 @@ const State = class {
    * @param {Int[][]} goalBoard 3*3 array containing goal board
    * @returns f score
    */
-  calculateF(goalBoard){
+  calculateF(goalBoard) {
     let f = this.g;
     for (let i = 0; i < goalBoard.length; i++) {
       for (let j = 0; j < goalBoard.length; j++) {
-        if (this.board[i][j] != goalBoard[i][j]){
-          f++ ;
+        if (this.board[i][j] != goalBoard[i][j]) {
+          f++;
         }
       }
     }
-    return f
+    return f;
   }
 };
 
@@ -50,10 +48,14 @@ var goalsDom = [
   [-1, -1, -1],
 ];
 var swapAmount = undefined;
-var domInputSwapAmount = undefined
+var domInputSwapAmount = undefined;
 
 var maxEpoch = undefined;
-var domInputMaxEpoch = undefined
+var domInputMaxEpoch = undefined;
+
+var printArray = [];
+var showAll = true;
+var pointerStep = 0;
 
 /**
  * Init func to prepare variables
@@ -69,27 +71,27 @@ function init() {
     goalsDom[y][x] = goal;
     if (input == 0) zeropos = [y, x];
   }
-  domInputSwapAmount = document.getElementById('inputSwapAmount')
-  swapAmount = domInputSwapAmount.value
-  domInputMaxEpoch = document.getElementById('inputMaxEpoch')
-  maxEpoch = domInputMaxEpoch.value
+  domInputSwapAmount = document.getElementById("inputSwapAmount");
+  swapAmount = domInputSwapAmount.value;
+  domInputMaxEpoch = document.getElementById("inputMaxEpoch");
+  maxEpoch = domInputMaxEpoch.value;
 }
 
 function onChangeSwapAmount() {
-  swapAmount = domInputSwapAmount.value
+  swapAmount = domInputSwapAmount.value;
 }
 
 function onChangeMaxEpoch() {
-  maxEpoch = domInputMaxEpoch.value
+  maxEpoch = domInputMaxEpoch.value;
 }
 
 /**
  * randomly generate start and goal matrix
  */
 function randomMatrix() {
-  randomInputMatrix()
-  randomGoalMatrix()
-  console.log('RandomMatrix');
+  randomInputMatrix();
+  randomGoalMatrix();
+  console.log("RandomMatrix");
 }
 
 /**
@@ -100,9 +102,9 @@ function randomInputMatrix() {
   // maka board awal yang akan digunakan
   // adalah dari matrix goals supaya
   // solusinya pasti ada
-  console.log("random input")
+  console.log("random input");
   let board = getMatrixFromDom(goalsDom);
-  console.table(board)
+  console.table(board);
   let zeropos_x = undefined,
     zeropos_y = undefined;
   for (let i = 0; i < dimensiBoard; i++) {
@@ -128,25 +130,25 @@ function randomInputMatrix() {
       else if (swapDirection == 0 && zeropos_y > 0) {
         board = swap(board, zeropos_y, zeropos_x, zeropos_y - 1, zeropos_x);
         isSwapped = true;
-        zeropos_y --;
+        zeropos_y--;
         lastSwapDirection = swapDirection;
         console.table(board);
       } else if (swapDirection == 1 && zeropos_x < 2) {
         board = swap(board, zeropos_y, zeropos_x, zeropos_y, zeropos_x + 1);
         isSwapped = true;
-        zeropos_x ++;
+        zeropos_x++;
         lastSwapDirection = swapDirection;
         console.table(board);
       } else if (swapDirection == 2 && zeropos_y < 2) {
         board = swap(board, zeropos_y, zeropos_x, zeropos_y + 1, zeropos_x);
         isSwapped = true;
-        zeropos_y ++;
+        zeropos_y++;
         lastSwapDirection = swapDirection;
         console.table(board);
       } else if (swapDirection == 3 && zeropos_x > 0) {
         board = swap(board, zeropos_y, zeropos_x, zeropos_y, zeropos_x - 1);
         isSwapped = true;
-        zeropos_x --;
+        zeropos_x--;
         lastSwapDirection = swapDirection;
         console.table(board);
       }
@@ -178,9 +180,9 @@ function randomGoalMatrix() {
   // maka board awal yang akan digunakan
   // adalah dari matrix inputs supaya
   // solusinya pasti ada
-  console.log('random goal')
+  console.log("random goal");
   let board = getMatrixFromDom(inputsDom);
-  console.table(board)
+  console.table(board);
   let zeropos_x = undefined,
     zeropos_y = undefined;
   for (let i = 0; i < dimensiBoard; i++) {
@@ -205,25 +207,25 @@ function randomGoalMatrix() {
       if (isOppositeDirection(lastSwapDirection, swapDirection)) continue;
       else if (swapDirection == 0 && zeropos_y > 0) {
         board = swap(board, zeropos_y, zeropos_x, zeropos_y - 1, zeropos_x);
-        zeropos_y --;
+        zeropos_y--;
         isSwapped = true;
         lastSwapDirection = swapDirection;
         console.table(board);
       } else if (swapDirection == 1 && zeropos_x < 2) {
         board = swap(board, zeropos_y, zeropos_x, zeropos_y, zeropos_x + 1);
-        zeropos_x ++;
+        zeropos_x++;
         isSwapped = true;
         lastSwapDirection = swapDirection;
         console.table(board);
       } else if (swapDirection == 2 && zeropos_y < 2) {
         board = swap(board, zeropos_y, zeropos_x, zeropos_y + 1, zeropos_x);
-        zeropos_y ++;
+        zeropos_y++;
         isSwapped = true;
         lastSwapDirection = swapDirection;
         console.table(board);
       } else if (swapDirection == 3 && zeropos_x > 0) {
         board = swap(board, zeropos_y, zeropos_x, zeropos_y, zeropos_x - 1);
-        zeropos_x --;
+        zeropos_x--;
         isSwapped = true;
         lastSwapDirection = swapDirection;
         console.table(board);
@@ -250,11 +252,11 @@ function randomGoalMatrix() {
 
 function isOppositeDirection(first, second) {
   return (
-    (first == 0 && second == 2) || 
+    (first == 0 && second == 2) ||
     (first == 2 && second == 0) ||
     (first == 1 && second == 3) ||
     (first == 3 && second == 1)
-  )
+  );
 }
 
 /**
@@ -413,13 +415,18 @@ function BFS() {
   console.log("Solution:");
   printSolution(done[done.length - 1]);
 
+  // SHOW BUTTON
+  document.getElementById("view").classList.remove("hidden");
+  document.getElementById("view").innerHTML = "Show Steps";
+
   // CLEAN HTML SOLUTION BOARD
   document.getElementById("templateEpoch").removeAttribute("class");
   document.getElementById("templateEpoch").innerHTML = "";
 
   console.log("Solution Board:");
+  printArray = [];
   printSolutionBoard(done[done.length - 1]);
-  console.log(done[done.length - 1]);
+  printHasil();
 }
 
 /**
@@ -456,7 +463,7 @@ function Astar() {
   console.log("start:", start);
   var queue = new PriorityQueue();
   var done = new Array();
-  queue.enqueue(start,start.calculateF(goals));
+  queue.enqueue(start, start.calculateF(goals));
   let ctr = 0;
   do {
     ++ctr;
@@ -485,7 +492,7 @@ function Astar() {
         curr
       );
       // if (!isReccurant(newCurr.board, done))
-      queue.enqueue(newCurr,newCurr.calculateF(goals));
+      queue.enqueue(newCurr, newCurr.calculateF(goals));
     }
     if (curr.zeropos_x > 0) {
       // bisa ke kiri
@@ -505,7 +512,7 @@ function Astar() {
         curr
       );
       // if (!isReccurant(newCurr.board, done))
-      queue.enqueue(newCurr,newCurr.calculateF(goals));
+      queue.enqueue(newCurr, newCurr.calculateF(goals));
     }
     if (curr.zeropos_y < 2) {
       // bisa ke bawah
@@ -525,7 +532,7 @@ function Astar() {
         curr
       );
       // if (!isReccurant(newCurr.board, done))
-      queue.enqueue(newCurr,newCurr.calculateF(goals));
+      queue.enqueue(newCurr, newCurr.calculateF(goals));
     }
     if (curr.zeropos_y > 0) {
       // bisa ke atas
@@ -545,7 +552,7 @@ function Astar() {
         curr
       );
       // if (!isReccurant(newCurr.board, done))
-      queue.enqueue(newCurr,newCurr.calculateF(goals));
+      queue.enqueue(newCurr, newCurr.calculateF(goals));
     }
     console.log("sesudah swap");
     console.log("curr:", curr);
@@ -564,13 +571,13 @@ function Astar() {
   console.log("Solution:");
   printSolution(done[done.length - 1]);
 
-  // CLEAN HTML SOLUTION BOARD
-  document.getElementById("templateEpoch").removeAttribute("class");
-  document.getElementById("templateEpoch").innerHTML = "";
+  // SHOW BUTTON
+  document.getElementById("view").classList.remove("hidden");
 
   console.log("Solution Board:");
+  printArray = [];
   printSolutionBoard(done[done.length - 1]);
-  console.log(done[done.length - 1]);
+  printHasil();
 }
 
 /**
@@ -667,35 +674,124 @@ function printSolutionBoard(state) {
   }
   console.table(state.board);
 
-  //ADD h1
-  let h1 = document.createElement("h1");
-  // h1.setAttribute("id", `Epoch${i + 1}`);
-  h1.setAttribute("class", "font-medium text-lg");
-  h1.innerHTML = state.step;
+  var template = {
+    board: state.board,
+    step: state.step,
+  };
 
-  //ADD table
-  let table = document.createElement("table");
-  // table.setAttribute("id", `tableEpoch${i + 1}`);
-  table.setAttribute("class", "table-fixed text-xl");
-  let tbody = document.createElement("tbody");
-  table.append(tbody);
-  for (let j = 0; j < 3; j++) {
-    let tr = document.createElement("tr");
-    // tr.setAttribute("id", `trEpoch${i + 1}[${j}]`);
-    tbody.append(tr);
-    for (let k = 0; k < 3; k++) {
-      let td = document.createElement("td");
-      let div = document.createElement("div");
-      td.setAttribute("class", "border border-gray-600");
-      div.setAttribute("class", "text-center w-8 h-8");
-      // td.setAttribute("id", `tdEpoch${i + 1}[${j}][${k}]`);
-      tr.append(td);
-      // div.setAttribute("id", `divEpoch${i + 1}[${j}][${k}]`);
-      td.append(div);
-      div.innerHTML = state.board[j][k];
+  //ADD to printArray
+  printArray.push(template);
+}
+
+/**
+ * function to switch between show all and show steps
+ *
+ * **/
+function changeShow() {
+  showAll = !showAll;
+
+  // CHANGE BUTTON TEXT
+  showAll
+    ? (document.getElementById("view").innerHTML = "Show Steps")
+    : (document.getElementById("view").innerHTML = "Show All");
+
+  // CLEAR TULISAN DI templateEpoch
+  printHasil();
+}
+
+function printHasil() {
+  document.getElementById("templateEpoch").innerHTML = "";
+  if (showAll) {
+    for (i = 0; i < printArray.length; i++) {
+      //ADD h1
+      let h1 = document.createElement("h1");
+      h1.setAttribute("class", "font-medium text-lg");
+      h1.innerHTML = printArray[i].step;
+      //ADD table
+      let table = document.createElement("table");
+      table.setAttribute("class", "table-fixed text-xl");
+
+      let tbody = document.createElement("tbody");
+      table.append(tbody);
+      for (let j = 0; j < 3; j++) {
+        let tr = document.createElement("tr");
+        tbody.append(tr);
+        for (let k = 0; k < 3; k++) {
+          let td = document.createElement("td");
+          let div = document.createElement("div");
+          td.setAttribute("class", "border border-gray-600");
+          div.setAttribute("class", "text-center w-8 h-8");
+          tr.append(td);
+          td.append(div);
+          div.innerHTML = printArray[i].board[j][k];
+        }
+      }
+
+      document
+        .getElementById("templateEpoch")
+        .classList.remove("flex", "flex-col", "items-center");
+      document.getElementById("templateEpoch").append(h1);
+      document.getElementById("templateEpoch").append(table);
+      document.getElementById("stepNavigation").classList.add("hidden");
     }
-  }
+  } else {
+    //ADD h1
+    let h1 = document.createElement("h1");
+    h1.setAttribute("class", "font-medium text-lg");
+    h1.innerHTML = `Steps ${pointerStep}`;
+    //ADD table
+    let table = document.createElement("table");
+    table.setAttribute("class", "table-fixed text-xl");
 
-  document.getElementById("templateEpoch").append(h1);
-  document.getElementById("templateEpoch").append(table);
+    let tbody = document.createElement("tbody");
+    table.append(tbody);
+    for (let j = 0; j < 3; j++) {
+      let tr = document.createElement("tr");
+      tbody.append(tr);
+      for (let k = 0; k < 3; k++) {
+        let td = document.createElement("td");
+        let div = document.createElement("div");
+        td.setAttribute("class", "border border-gray-600");
+        div.setAttribute("class", "text-center w-8 h-8");
+        tr.append(td);
+        td.append(div);
+        div.innerHTML = printArray[pointerStep].board[j][k];
+      }
+    }
+
+    document
+      .getElementById("templateEpoch")
+      .setAttribute("class", "flex flex-col items-center");
+    document.getElementById("templateEpoch").append(h1);
+    document.getElementById("templateEpoch").append(table);
+    document.getElementById("stepNavigation").classList.remove("hidden");
+  }
+}
+
+function front() {
+  pointerStep = 0;
+  printHasil();
+  console.log("FRONT");
+}
+
+function back() {
+  if (pointerStep - 1 >= 0) {
+    pointerStep--;
+  }
+  printHasil();
+  console.log("BACK");
+}
+
+function next() {
+  if (pointerStep + 1 < printArray.length) {
+    pointerStep++;
+  }
+  printHasil();
+  console.log("NEXT");
+}
+
+function rear() {
+  pointerStep = printArray.length - 1;
+  printHasil();
+  console.log("REAR");
 }

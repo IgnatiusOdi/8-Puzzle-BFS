@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -239,9 +238,16 @@
               <i class="fa-solid fa-shuffle"></i>
             </button>
           </div> -->
-          <h2 class="text-lg font-semibold mt-2">Random Amount: </h2>
+          <h2 class="text-lg font-semibold mt-2">Random Amount:</h2>
           <div class="flex w-full">
-            <input id="inputSwapAmount" class="shrink min-w-0 border border-gray-800 rounded-l border-r-0 px-1" type="number" onchange="onChangeSwapAmount()" min="1" value="1">
+            <input
+              id="inputSwapAmount"
+              class="shrink min-w-0 border border-gray-800 rounded-l border-r-0 px-1"
+              type="number"
+              onchange="onChangeSwapAmount()"
+              min="1"
+              value="1"
+            />
             <button
               class="flex-none w-8 h-8 border border-gray-800 text-gray-50 bg-indigo-700 active:bg-gray-200 active:text-indigo-700 focus:ring focus:ring-indigo-200 font-semibold rounded-r border-l-0"
               onclick="randomMatrix()"
@@ -249,9 +255,16 @@
               <i class="fa-solid fa-shuffle"></i>
             </button>
           </div>
-          <h2 class="text-lg font-semibold mt-2">Max Epoch: </h2>
+          <h2 class="text-lg font-semibold mt-2">Max Epoch:</h2>
           <div class="flex w-full">
-            <input id="inputMaxEpoch" class="shrink min-w-full border border-gray-800 px-1" type="number" onchange="onChangeMaxEpoch()" min="3" value="100">
+            <input
+              id="inputMaxEpoch"
+              class="shrink min-w-full border border-gray-800 px-1"
+              type="number"
+              onchange="onChangeMaxEpoch()"
+              min="3"
+              value="100"
+            />
           </div>
           <button
             class="w-full py-2 px-1 border border-gray-800 mt-2 text-gray-50 bg-indigo-700 active:bg-gray-200 active:text-indigo-700 focus:ring focus:ring-indigo-200 rounded font-semibold"
@@ -268,7 +281,40 @@
         </div>
         <div class="w-8/12 md:9/12 lg:w-10/12 py-4 px-2 md:px-4 space-y-4">
           <div id="iterCount"></div>
-          <div id="templateEpoch" class="hidden"></div>
+          <button
+            id="view"
+            class="w-full py-2 px-1 border border-gray-800 mt-2 text-gray-50 bg-indigo-700 active:bg-gray-200 active:text-indigo-700 focus:ring focus:ring-indigo-200 rounded font-semibold hidden"
+            onclick="changeShow()"
+          >
+            Show Steps
+          </button>
+          <div id="templateEpoch"></div>
+          <div id="stepNavigation" class="flex hidden">
+            <button
+              class="w-full py-2 px-1 border border-gray-800 mt-2 text-gray-50 bg-indigo-700 active:bg-gray-200 active:text-indigo-700 focus:ring focus:ring-indigo-200 rounded font-semibold"
+              onclick="front()"
+            >
+              <<
+            </button>
+            <button
+              class="w-full py-2 px-1 border border-gray-800 mt-2 text-gray-50 bg-indigo-700 active:bg-gray-200 active:text-indigo-700 focus:ring focus:ring-indigo-200 rounded font-semibold"
+              onclick="back()"
+            >
+              <
+            </button>
+            <button
+              class="w-full py-2 px-1 border border-gray-800 mt-2 text-gray-50 bg-indigo-700 active:bg-gray-200 active:text-indigo-700 focus:ring focus:ring-indigo-200 rounded font-semibold"
+              onclick="next()"
+            >
+              >
+            </button>
+            <button
+              class="w-full py-2 px-1 border border-gray-800 mt-2 text-gray-50 bg-indigo-700 active:bg-gray-200 active:text-indigo-700 focus:ring focus:ring-indigo-200 rounded font-semibold"
+              onclick="rear()"
+            >
+              >>
+            </button>
+          </div>
         </div>
       </div>
     </div>
